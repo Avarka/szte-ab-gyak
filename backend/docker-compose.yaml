@@ -6,7 +6,7 @@ services:
     image: mysql
     restart: always
     env_file:
-      - .env
+      - ./.env
     environment:
       - MYSQL_DATABASE=${DATABASE_NAME}
       - MYSQL_ROOT_PASSWORD=${ROOT_PASSWORD}
@@ -14,3 +14,15 @@ services:
       - ${LOCAL_PORT}:${CONTAINER_PORT}
     volumes:
       - ./db-init:/docker-entrypoint-initdb.d
+
+  server:
+    container_name: server
+    build:
+      context: .
+      dockerfile: Dockerfile
+      
+    restart: always
+    ports:
+      - 3000:8080
+    depends_on:
+      - db
