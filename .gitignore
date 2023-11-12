@@ -1,3 +1,4 @@
 *.dia.autosave
 *.dia~
 ~$*.docx
+*.tmp
