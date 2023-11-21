@@ -1,2 +1,6 @@
+*.dia.autosave
+*.dia~
+~$*.docx
+*.tmp
 node_modules
 dist
