@@ -10,6 +10,7 @@ services:
     environment:
       - MYSQL_DATABASE=${DATABASE_NAME}
       - MYSQL_ROOT_PASSWORD=${ROOT_PASSWORD}
+      - LANG=C.UTF-8
     ports:
       - ${LOCAL_PORT}:${CONTAINER_PORT}
     volumes:
@@ -26,3 +27,17 @@ services:
       - 3000:8080
     depends_on:
       - db
+
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      - PMA_HOST=db
+      - PMA_PORT=3306
+      - PMA_USER=root
+      - PMA_PASSWORD=${ROOT_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${ROOT_PASSWORD}
+    
