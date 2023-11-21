@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  db:
+    container_name: database
+    image: mysql
+    restart: always
+    env_file:
+      - ./.env
+    environment:
+      - MYSQL_DATABASE=${DATABASE_NAME}
+      - MYSQL_ROOT_PASSWORD=${ROOT_PASSWORD}
+      - LANG=C.UTF-8
+    ports:
+      - ${LOCAL_PORT}:${CONTAINER_PORT}
+    volumes:
+      - ./db-init:/docker-entrypoint-initdb.d
+
+  server:
+    container_name: server
+    build:
+      context: .
+      dockerfile: Dockerfile
+      
+    restart: always
+    ports:
+      - 3000:8080
+    depends_on:
+      - db
+
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      - PMA_HOST=db
+      - PMA_PORT=3306
+      - PMA_USER=root
+      - PMA_PASSWORD=${ROOT_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${ROOT_PASSWORD}
+    
