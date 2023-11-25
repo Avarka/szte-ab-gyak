@@ -14,12 +14,12 @@ services:
     ports:
       - ${LOCAL_PORT}:${CONTAINER_PORT}
     volumes:
-      - ./db-init:/docker-entrypoint-initdb.d
+      - ./backend/db-init:/docker-entrypoint-initdb.d
 
   server:
     container_name: server
     build:
-      context: .
+      context: ./backend
       dockerfile: Dockerfile
       
     restart: always
@@ -27,6 +27,19 @@ services:
       - 3000:8080
     depends_on:
       - db
+    
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+
+    restart: always
+    ports:
+      - 8081:3000
+    depends_on:
+      - server
+    
 
   phpmyadmin:
     container_name: phpmyadmin

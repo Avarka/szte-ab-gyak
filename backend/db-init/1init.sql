@@ -72,10 +72,10 @@ CREATE TABLE IF NOT EXISTS `invoices`
         `type` INT NOT NULL,
         `date` DATE NOT NULL,
         `deadline` DATE NOT NULL,
-        `sum` DOUBLE NOT NULL,
+        `sum` DOUBLE NOT NULL DEFAULT 0,
         `customerTaxNumber` DECIMAL(10) NOT NULL,
         `issuer` VARCHAR(200) NOT NULL,
-        `issuedDate` DATE NOT NULL,
+        `issuedDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (`number`, `type`),
         FOREIGN KEY (`customerTaxNumber`) REFERENCES `customers`(`taxNumber`) ON UPDATE CASCADE ON DELETE RESTRICT,
         FOREIGN KEY (`issuer`) REFERENCES `users`(`email`) ON UPDATE CASCADE ON DELETE RESTRICT,
@@ -102,13 +102,14 @@ CREATE TABLE IF NOT EXISTS `items`
 
 CREATE TABLE IF NOT EXISTS `invoiceItems`
     (
-        `order` INT NOT NULL PRIMARY KEY,
+        `order` INT NOT NULL,
         `itemId` INT NOT NULL,
         `invoiceNumber` CHAR(30) NOT NULL,
         `invoiceType` INT NOT NULL,
         `amount` INT NOT NULL,
+        PRIMARY KEY (`order`, `invoiceNumber`, `invoiceType`),
         FOREIGN KEY (`itemId`) REFERENCES `items`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT,
-        FOREIGN KEY (`invoiceNumber`, `invoiceType`) REFERENCES `invoices`(`number`, `type`) ON UPDATE CASCADE ON DELETE RESTRICT
+        FOREIGN KEY (`invoiceNumber`, `invoiceType`) REFERENCES `invoices`(`number`, `type`) ON UPDATE CASCADE ON DELETE CASCADE
     )
     CHARSET=utf8mb4
     COLLATE='utf8mb4_hungarian_ci'
