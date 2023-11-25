@@ -32,7 +32,7 @@ const app: Express = express();
 const port = process.env.PORT;
 
 app.use(cors({
-    origin: ['http://localhost:3000', 'http://localhost:3001'],
+    origin: ['http://localhost:3000', 'http://localhost:3001', 'https://ab.vadavar.hu'],
     credentials: true
 }));
 
@@ -170,7 +170,7 @@ app.get('/getInvoices', isAuthenticated, (req: Request, res: Response) => {
     dataBase.execute("SELECT * FROM `invoices` " + 
     "INNER JOIN `customers` ON `invoices`.`customerTaxNumber` = `customers`.`taxNumber` " +
     "INNER JOIN `invoiceTypes` ON `invoices`.`type` = `invoiceTypes`.`id` " +
-    "ORDER BY `inoices`.`number`", (err, result) => {
+    "ORDER BY `invoices`.`number`", (err, result) => {
         if (err) {
             res.status(500)
                 .send(err);
